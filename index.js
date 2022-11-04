@@ -35,8 +35,15 @@ const dbConnect = async () => {
 
 dbConnect();
 
+const serviceCollection = client.db('geniusCar').collection('services');
+
 app.get('/', (req, res) => {
   res.send('Genius car Server Side');
+});
+
+app.post('/users', async (req, res) => {
+  try {
+  } catch (error) {}
 });
 
 app.listen(port, () => {
