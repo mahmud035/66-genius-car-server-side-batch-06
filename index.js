@@ -36,6 +36,7 @@ const dbConnect = async () => {
 dbConnect();
 
 const serviceCollection = client.db('geniusCar').collection('services');
+const orderCollection = client.db('geniusCar').collection('orders');
 
 app.get('/', (req, res) => {
   res.send('Genius car Server Side');
@@ -58,6 +59,17 @@ app.get('/services/:id', async (req, res) => {
     const query = { _id: ObjectId(id) };
     const service = await serviceCollection.findOne(query);
     res.send(service);
+  } catch (error) {
+    console.log(error.message.bold);
+  }
+});
+
+// orders api
+app.post('/orders', async (req, res) => {
+  try {
+    const order = req.body;
+    const result = await orderCollection.insertOne(order);
+    res.send(result);
   } catch (error) {
     console.log(error.message.bold);
   }
