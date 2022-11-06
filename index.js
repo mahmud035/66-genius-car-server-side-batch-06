@@ -42,6 +42,7 @@ app.get('/', (req, res) => {
   res.send('Genius car Server Side');
 });
 
+//* GET (READ)
 app.get('/services', async (req, res) => {
   try {
     const query = {};
@@ -53,6 +54,7 @@ app.get('/services', async (req, res) => {
   }
 });
 
+//* GET (READ)
 app.get('/services/:id', async (req, res) => {
   try {
     const id = req.params.id;
@@ -64,6 +66,7 @@ app.get('/services/:id', async (req, res) => {
   }
 });
 
+//* GET (READ)
 // orders api
 app.get('/orders', async (req, res) => {
   console.log(req.query.email);
@@ -81,6 +84,7 @@ app.get('/orders', async (req, res) => {
   res.send(orders);
 });
 
+//* POST (CREATE)
 app.post('/orders', async (req, res) => {
   try {
     const order = req.body;
@@ -91,11 +95,35 @@ app.post('/orders', async (req, res) => {
   }
 });
 
+//* UPDATE (PATCH)
+app.patch('/orders/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const status = req.body.status;
+    const filter = { _id: ObjectId(id) };
+    const updatedDoc = {
+      $set: {
+        status: status,
+      },
+    };
+    const result = await orderCollection.updateOne(filter, updatedDoc);
+
+    res.send(result);
+  } catch (error) {
+    console.log(error.message.bold);
+  }
+});
+
+//* DELETE (DELETE)
 app.delete('/orders/:id', async (req, res) => {
-  const id = req.params.id;
-  const query = { _id: ObjectId(id) };
-  const result = await orderCollection.deleteOne(query);
-  res.send(result);
+  try {
+    const id = req.params.id;
+    const query = { _id: ObjectId(id) };
+    const result = await orderCollection.deleteOne(query);
+    res.send(result);
+  } catch (error) {
+    console.log(error.message.bold);
+  }
 });
 
 app.listen(port, () => {
