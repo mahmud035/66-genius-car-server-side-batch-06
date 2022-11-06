@@ -96,6 +96,17 @@ app.post('/orders', async (req, res) => {
   }
 });
 
+//* POST [For => JWT]
+app.post('/jwt', async (req, res) => {
+  try {
+    const user = req.body;
+    const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+    res.send({ token });
+  } catch (error) {
+    console.log(error.message.bold);
+  }
+});
+
 //* UPDATE (PATCH)
 app.patch('/orders/:id', async (req, res) => {
   try {
