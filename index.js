@@ -25,6 +25,26 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
 });
 
+const verifyJWT = (req, res, next) => {
+  // console.log(req.headers.authorization);
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).send({ message: 'Unauthorized Access' });
+  }
+
+  try {
+    const token = authHeader.split(' ')[1];
+    const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    console.log(user);
+    req.user = user;
+
+    next();
+  } catch (error) {
+    res.status(403).send({ message: 'Invalid Token' });
+  }
+};
+
 const dbConnect = async () => {
   try {
     await client.connect();
@@ -69,8 +89,9 @@ app.get('/services/:id', async (req, res) => {
 
 //* GET (READ)
 // orders api
-app.get('/orders', async (req, res) => {
-  console.log(req.query.email);
+app.get('/orders', verifyJWT, async (req, res) => {
+  // console.log(req.query.email);
+  // console.log(req.headers.authorization);
 
   let query = {};
   if (req.query.email) {
