@@ -36,7 +36,7 @@ const verifyJWT = (req, res, next) => {
   try {
     const token = authHeader.split(' ')[1];
     const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    console.log(user);
+    // console.log(user);
     req.user = user;
 
     next();
@@ -91,7 +91,12 @@ app.get('/services/:id', async (req, res) => {
 // orders api
 app.get('/orders', verifyJWT, async (req, res) => {
   // console.log(req.query.email);
-  // console.log(req.headers.authorization);
+  const user = req.user;
+  console.log(user);
+
+  if (user.email !== req.query.email) {
+    return res.status(403).send({ message: 'Forbidden Access' });
+  }
 
   let query = {};
   if (req.query.email) {
