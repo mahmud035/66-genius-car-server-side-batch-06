@@ -41,7 +41,7 @@ const verifyJWT = (req, res, next) => {
 
     next();
   } catch (error) {
-    res.status(403).send({ message: 'Invalid Token' });
+    res.status(403).send({ message: 'Forbidden Access' });
   }
 };
 
@@ -112,7 +112,7 @@ app.get('/orders', verifyJWT, async (req, res) => {
 });
 
 //* POST (CREATE)
-app.post('/orders', async (req, res) => {
+app.post('/orders', verifyJWT, async (req, res) => {
   try {
     const order = req.body;
     const result = await orderCollection.insertOne(order);
@@ -134,7 +134,7 @@ app.post('/jwt', async (req, res) => {
 });
 
 //* UPDATE (PATCH)
-app.patch('/orders/:id', async (req, res) => {
+app.patch('/orders/:id', verifyJWT, async (req, res) => {
   try {
     const id = req.params.id;
     const status = req.body.status;
@@ -153,7 +153,7 @@ app.patch('/orders/:id', async (req, res) => {
 });
 
 //* DELETE (DELETE)
-app.delete('/orders/:id', async (req, res) => {
+app.delete('/orders/:id', verifyJWT, async (req, res) => {
   try {
     const id = req.params.id;
     const query = { _id: ObjectId(id) };
