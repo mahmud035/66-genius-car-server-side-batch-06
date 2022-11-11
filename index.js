@@ -66,7 +66,24 @@ app.get('/', (req, res) => {
 //* GET (READ)
 app.get('/services', async (req, res) => {
   try {
-    let query = { price: { $gt: 50, $lt: 200 } };
+    //* Mongodb Comparison & Logical Operator
+    // const query = { price: { $gt: 50, $lt: 200 } };
+    // const query = { price: { $eq: 200 } };
+    // const query = { price: { $gte: 200 } };
+    // const query = { price: { $lte: 200 } };
+    // const query = { price: { $ne: 200 } };
+    // const query = { price: { $in: [30, 150, 200] } };
+    // const query = { price: { $nin: [30, 150, 200] } };
+    /*    const query = {
+      $and: [{ price: { $gt: 50 } }, { price: { $lt: 300 } }],
+    }; */
+    /*   const query = {
+      $and: [
+        { price: { $gt: 50 } },
+        { price: { $lt: 300 } },
+        { title: 'Engine Repair' },
+      ],
+    }; */
 
     const order = req.query.order === 'asc' ? 1 : -1;
     console.log(order);
