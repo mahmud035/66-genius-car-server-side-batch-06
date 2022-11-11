@@ -66,8 +66,12 @@ app.get('/', (req, res) => {
 //* GET (READ)
 app.get('/services', async (req, res) => {
   try {
-    const query = {};
-    const cursor = serviceCollection.find(query);
+    let query = { price: { $gt: 50, $lt: 200 } };
+
+    const order = req.query.order === 'asc' ? 1 : -1;
+    console.log(order);
+
+    const cursor = serviceCollection.find(query).sort({ price: order });
     const services = await cursor.toArray();
     res.send(services);
   } catch (error) {
