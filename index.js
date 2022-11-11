@@ -66,6 +66,16 @@ app.get('/', (req, res) => {
 //* GET (READ)
 app.get('/services', async (req, res) => {
   try {
+    const search = req.query.search;
+    console.log(search);
+    let query = {};
+
+    if (search.length > 0) {
+      query = {
+        $text: { $search: search },
+      };
+    }
+
     //* Mongodb Comparison & Logical Operator
     // const query = { price: { $gt: 50, $lt: 200 } };
     // const query = { price: { $eq: 200 } };
@@ -86,7 +96,7 @@ app.get('/services', async (req, res) => {
     }; */
 
     const order = req.query.order === 'asc' ? 1 : -1;
-    console.log(order);
+    // console.log(order);
 
     const cursor = serviceCollection.find(query).sort({ price: order });
     const services = await cursor.toArray();
